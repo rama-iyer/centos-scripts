@@ -75,13 +75,42 @@ docker inspect sleepy_leavitt
 docker logs sleepy_leavitt
 
 # Environment variables
+# -e use environment variable
 docker run -e APP_COLOR=blue -p 86:8080 kodekloud/simple-webapp
 
+# use inspect to check env variables
+docker inspect kind_gagarin
+
+# Creating image
+# Methods for deploying a flask web app
+# OS - Ubuntu
+# Update apt repo
+# Install dependencies using apt
+# Install Python dependencies using pip
+# Copy source code to /opt folder
+# Run the web server using "flask" command
+# Same process but using Docker
+# Create a Docker file
+
+# <INSTRUCTION> <ARGUMENT>
+# Must starts with FROM <OS>
+FROM Ubuntu
+
+RUN apt-get update
+RUN apt-get install python
+
+RUN pip install flask
+RUN pip install flask-mysql
+
+# Copy files from current directory to '/opt/source-code' in container
+COPY . /opt/source-code
+
+ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run
 
 
-
+# Build Docker file
 # Build an image from the Dockerfile in the current directory and tag the image
-docker build -t myimage:1.0
+docker build Dockerfile -t myimage:1.0
 
 # List all images that are locally stored with the Docker Engine
 docker image ls
@@ -97,3 +126,17 @@ docker container rm -f $(docker ps -aq)
 
 # Print the last 100 lines of a container’s logs docker container
 logs --tail 100 web
+
+# Purging All Unused or Dangling Images, Containers, Volumes, and Networks
+# Docker provides a single command that will clean up any resources — images, containers, volumes, and networks — that are dangling (not associated with a container):
+docker system prune
+
+# To additionally remove any stopped containers and all unused images (not just dangling images), add the -a flag to the command:
+docker system prune -a
+
+# List all images
+docker images -a
+
+# Removing Docker Images
+# Remove all images
+docker rmi $(docker images -a -q)
